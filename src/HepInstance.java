@@ -21,12 +21,12 @@ public class HepInstance {
         return category;
     }
 
-    public String toString(){
-        StringBuilder ans = new StringBuilder(categoryNames.get(category));
-        ans.append(" ");
-        for (Boolean val : values)
-            ans.append(val?"true  ":"false ");
-        return ans.toString();
-    }
+//    public String toString(){
+//        StringBuilder ans = new StringBuilder(categoryNames.get(category));
+//        ans.append(" ");
+//        for (Boolean val : values)
+//            ans.append(val?"true  ":"false ");
+//        return ans.toString();
+//    }
 
 }
