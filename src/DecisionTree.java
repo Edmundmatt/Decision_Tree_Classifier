@@ -24,46 +24,56 @@ public class DecisionTree {
      * @param instances
      * @param attributes
      */
-    public static Node buildTree(List<Node> instances, List<String> attributes){
-        int BestAtt;
+    public static Node buildTree(List<HepInstance> instances, List<String> attributes){
+        String bestAtt = null;
         if(instances.isEmpty()){
             //Return leaf node containing the name and probability of the most probable class across the whole training set
         }else if(isPure(instances)){
             //Return a leaf node that contains the name of the class and probability 1
         }else if(attributes.isEmpty()){
             //Return a leaf node that contains the name and probability of the majority class of the instances (random if equal classes)
-        }else{
-            //Find the best attribute
-            //for(each attribute not used yet)
+        }else { //Find the best attribute
+
+            List<HepInstance> bestInstsTrue = null;
+            List<HepInstance> bestInstsFalse = null;
+            for (String att : attributes) {   //for(each attribute not used yet)
+
                 //Separate instances into two sets
-                List<Node> atrbTrue = new ArrayList<>();
+                List<HepInstance> atrbTrue = new ArrayList<>();
                 //Compute purity of set
-                List<Node> atrbFalse = new ArrayList<>();
+                List<HepInstance> atrbFalse = new ArrayList<>();
                 //Compute purity of set
                 //if(weighted av. purity of the sets is best so far)
-                    //bestAtt = this attribute
-                    //bestInstsTrue = set of true instances
-                    //besInstsFalse = set of false instances
+                //bestAtt = this attribute
+                bestAtt = att;
+                //bestInstsTrue = set of true instances
+                //besInstsFalse = set of false instances
+            }
             //Build subTrees using remaining the remaining attributes
             //Node left = buildTree(bestInstsTrue, attributes - bestAtt)
+            attributes.remove(bestAtt);
+            Node left = buildTree(bestInstsTrue, attributes);
             //Node right = buildTree(bestInstsFalse, attributes - bestAtt)
-            }
-        //return Node(bestAtt, left, right)
+            Node right = buildTree(bestInstsFalse, attributes);
+            //return Node(bestAtt, left, right)
+            return new Node(bestAtt, left, right);
+        }
         return null;
         }
 
     /**
-     * Returns boolean of whether all categories of a Node containing a HepInstance list are the same.
+     * Returns boolean of whether all categories of a Node are the same.
      * @param instances
      * @return
      */
-    private static boolean isPure(List<Node> instances){
+    private static boolean isPure(List<HepInstance> instances){
+//        int category = null;
+        int category = Integer.MAX_VALUE;
+        for(int i = 0; i < instances.size(); i++){
+            if(category == instances.get(i).getCategory()) return false;
+            category = instances.get(i).getCategory();
 
-        return instances.stream()
-                .map(HepInstance::getCategory)
-                .distinct()
-                .limit(2)
-                .count() <= 1;
+        }
         return true;
     }
 
@@ -116,7 +126,7 @@ public class DecisionTree {
     }
 
     private class HepInstance {
-        //    private final List<String> categoryNames;
+//            private final List<String> categoryNames;
         private final int category;
         private final List<Boolean> values;
 

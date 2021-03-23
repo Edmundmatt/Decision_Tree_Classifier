@@ -1,23 +1,25 @@
 public class Node {
 
-    private int attribute;
+    private String attribute;
+    private String classLabel;
     private double probability;
     private Node left;
     private Node right;
+    private Boolean leaf;
 
-    public Node(int att, Node left, Node right){
+    public Node(String att, Node left, Node right){
         this.attribute = att;
         this.left = left;
         this.right = right;
     }
 
-//    public void setHepInstance(HepInstance hepInstance) {
-//        this.hepInstance = hepInstance;
-//    }
-//
-//    public HepInstance getHepInstance() {
-//        return hepInstance;
-//    }
+    public Node(String classLabel, double prob){
+        this.classLabel = classLabel;
+        this.probability = prob;
+        this.left = left;
+        this.right = right;
+        this.leaf = true;
+    }
 
     public void setProbability(double probability) {
         this.probability = probability;
@@ -42,4 +44,7 @@ public class Node {
     public Node getRight() {
         return right;
     }
+
+    public Boolean isLeaf(){ return leaf; }
+
 }
