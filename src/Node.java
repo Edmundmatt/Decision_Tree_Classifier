@@ -1,20 +1,20 @@
 public class Node {
 
-    private String attribute;
-    private String classLabel;
+    private String feature;
+    private String label;
     private double probability;
     private Node left;
     private Node right;
     private Boolean leaf;
 
-    public Node(String att, Node left, Node right){
-        this.attribute = att;
+    public Node(String feat, Node left, Node right){
+        this.feature = feat;
         this.left = left;
         this.right = right;
     }
 
-    public Node(String classLabel, double prob){
-        this.classLabel = classLabel;
+    public Node(String label, double prob){
+        this.label = label;
         this.probability = prob;
         this.left = left;
         this.right = right;
