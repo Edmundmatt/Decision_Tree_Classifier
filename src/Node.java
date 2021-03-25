@@ -20,6 +20,14 @@ public class Node {
         this.leaf = true;
     }
 
+    public String getFeature(){
+        return this.feature;
+    }
+
+    public String getLabel(){
+        return this.label;
+    }
+
     public void setProbability(double probability) {
         this.probability = probability;
     }

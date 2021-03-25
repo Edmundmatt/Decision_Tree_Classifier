@@ -13,10 +13,6 @@ public class Instance {
         return this.label;
     }
 
-    public void setLabel(String label){
-        this.label = label;
-    }
-
     public List<String> getFeatures(){
         return this.features;
     }

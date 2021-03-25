@@ -13,7 +13,12 @@ public class DecisionTree {
     public DecisionTree(String fileName){
         read(fileName);
         Node rootNode = buildTree(allInstances, categoryNames);
-        traverseTree(rootNode);
+        outputTree(rootNode);
+
+
+        read("C:\\Users\\Matthew\\IdeaProjects\\comp307assignment1part2v3\\data\\hepatitis-test");
+        for(Instance instance : allInstances) testTree(rootNode, instance);
+
     }
 
     public static void main(String[] args){
@@ -80,8 +85,16 @@ public class DecisionTree {
     /**
      * Traverse the created tree with testInstances - check accuracy of algorithm
      */
-    public static void traverseTree(Node node){
+    public static void outputTree(Node node){
         node.report("");
+    }
+
+    /**
+     * Test the algorithm's accuracy with test data
+     * @param node
+     */
+    public static void testTree(Node node, Instance instance){
+
     }
 
     /**
