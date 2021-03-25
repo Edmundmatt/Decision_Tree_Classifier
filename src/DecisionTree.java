@@ -24,13 +24,22 @@ public class DecisionTree {
      * @param
      */
     public static Node buildTree(List<Instance> instances, List<String> features){
+        String bestFeat = null;
+        Node left = null;
+        Node right= null;
         if(instances.isEmpty()){
             //Return a leaf node that contains the name and probability of the most probable class across the whole training set
+
         }else if(isPure(instances)){
             //Return a leaf node that contains the name of the class and probability 1
+            return new Node(instances.get(0).getLabel(), 1);
         }else if(features.isEmpty()){
             //Return a leaf node that contains the name and probability of the majority
-        }else{
+
+        }else{ //Find the best feature
+            List<Instance> bestInstsTrue = new ArrayList<>();
+            List<Instance> bestInstsFalse = new ArrayList<>();
+            List<Double> impurities = new ArrayList<>();
             for(int i = 0; i < features.size(); i++){
                 List<Instance> featTrue = new ArrayList<>();
                 List<Instance> featFalse = new ArrayList<>();
@@ -38,13 +47,32 @@ public class DecisionTree {
                     if(inst.getFeatures().get(i).equals("true")) featTrue.add(inst);
                     else featFalse.add(inst);
                 }
-                //Compute the purity of each set
+                //Compute the impurity of each set
                 //Think this means looking at the purity of the classification
-                double truePurity = computePurity(featTrue);
-                double falsePurity = computePurity(featFalse);
+                double trueImpurity = computeWeightedImpurity(featTrue);
+                double falseImpurity = computeWeightedImpurity(featFalse);
+                double weightAveImpurity = trueImpurity + falseImpurity;
+                //If the weighted average purity of these sets is the best so far
+                //Check that this is correct - so far in the loop of features?
+                boolean check = true;
+                if(!impurities.isEmpty()){
+                    for(Double d : impurities){
+                        if(d < weightAveImpurity) check = false;
+                    }
+                }
+                impurities.add(weightAveImpurity);
+                if(check){
+                    bestFeat = features.get(i);
+                    bestInstsTrue = featTrue;
+                    bestInstsFalse = featFalse;
+                }
             }
+            //Build subtrees using remaining attributes
+            features.remove(bestFeat);
+            left = buildTree(bestInstsTrue, features);
+            right = buildTree(bestInstsFalse, features);
         }
-        return null;
+        return new Node(bestFeat, left, right);
     }
 
     /**
@@ -60,9 +88,21 @@ public class DecisionTree {
         return true;
     }
 
-    private static double computePurity(List<Instance> instances){
-
-        return 0;
+    /**
+     * Compute and return the weighted purity of a set of instances
+     * @param instances
+     * @return
+     */
+    private static double computeWeightedImpurity(List<Instance> instances){
+        int aCount = 0;
+        int bCount = 0;
+        for(int i = 0; i < instances.size(); i++){
+            if(instances.get(i).getLabel().equals("live")) aCount++;
+            else bCount++;
+        }
+        double a = aCount;
+        double b = bCount;
+        return ((a * b) / ((a + b)*(a + b))) * ((double)aCount / (double)instances.size());
     }
 
     private static void highestProb(){

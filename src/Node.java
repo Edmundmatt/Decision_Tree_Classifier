@@ -16,8 +16,6 @@ public class Node {
     public Node(String label, double prob){
         this.label = label;
         this.probability = prob;
-        this.left = left;
-        this.right = right;
         this.leaf = true;
     }
 
