@@ -11,6 +11,7 @@ public class Node {
         this.feature = feat;
         this.left = left;
         this.right = right;
+        this.leaf = false;
     }
 
     public Node(String label, double prob){
@@ -44,5 +45,22 @@ public class Node {
     }
 
     public Boolean isLeaf(){ return leaf; }
+
+    public void report(String indent){
+        System.out.printf("%s%s = True:%n", indent, feature);
+        if(left.isLeaf())left.reportLeaf(indent);
+        else left.report(indent+"\t");
+        System.out.printf("%s%s = False:%n", indent, feature);
+        if(right.isLeaf()) right.reportLeaf(indent);
+        else right.report(indent+"\t");
+    }
+
+    public void reportLeaf(String indent){
+        if (probability==0){ //Error-checking
+            System.out.printf("%sUnknown%n", indent);
+        }else{
+            System.out.printf("%sClass %s, prob=%.2f%n", indent, label, probability);
+        }}
+
 
 }

@@ -13,6 +13,7 @@ public class DecisionTree {
     public DecisionTree(String fileName){
         read(fileName);
         Node rootNode = buildTree(allInstances, categoryNames);
+        traverseTree(rootNode);
     }
 
     public static void main(String[] args){
@@ -26,8 +27,8 @@ public class DecisionTree {
      */
     public static Node buildTree(List<Instance> instances, List<String> features){
         String bestFeat = null;
-        Node left = null;
-        Node right= null;
+        Node left;
+        Node right;
         if(instances.isEmpty()){
             //Return a leaf node that contains the name and probability of the most probable class across the whole training set
             return highestProb(allInstances);
@@ -77,6 +78,13 @@ public class DecisionTree {
     }
 
     /**
+     * Traverse the created tree with testInstances - check accuracy of algorithm
+     */
+    public static void traverseTree(Node node){
+        node.report("");
+    }
+
+    /**
      * Returns boolean of whether all categories of a Node are the same.
      * @param
      * @return
@@ -103,6 +111,7 @@ public class DecisionTree {
         }
         double a = aCount;
         double b = bCount;
+//        System.out.println(((a * b) / ((a + b)*(a + b))) * ((double)aCount / (double)instances.size()));
         return ((a * b) / ((a + b)*(a + b))) * ((double)aCount / (double)instances.size());
     }
 
