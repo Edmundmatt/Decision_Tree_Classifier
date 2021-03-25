@@ -2,12 +2,13 @@ import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Random;
 import java.util.Scanner;
 
 public class DecisionTree {
-    private List<String> categoryNames;
-    private int categoryNum;
-    private List<Instance> allInstances;
+    private static List<String> categoryNames;
+    private static int categoryNum;
+    private static List<Instance> allInstances;
 
     public DecisionTree(String fileName){
         read(fileName);
@@ -29,13 +30,13 @@ public class DecisionTree {
         Node right= null;
         if(instances.isEmpty()){
             //Return a leaf node that contains the name and probability of the most probable class across the whole training set
-
+            return highestProb(allInstances);
         }else if(isPure(instances)){
             //Return a leaf node that contains the name of the class and probability 1
             return new Node(instances.get(0).getLabel(), 1);
         }else if(features.isEmpty()){
-            //Return a leaf node that contains the name and probability of the majority
-
+            //Return a leaf node that contains the name and probability of the majority class of instances
+            return highestProb(instances);
         }else{ //Find the best feature
             List<Instance> bestInstsTrue = new ArrayList<>();
             List<Instance> bestInstsFalse = new ArrayList<>();
@@ -105,9 +106,25 @@ public class DecisionTree {
         return ((a * b) / ((a + b)*(a + b))) * ((double)aCount / (double)instances.size());
     }
 
-    private static void highestProb(){
-
+    private static Node highestProb(List<Instance> instances){
+        int aCount = 0;
+        int bCount = 0;
+        for(Instance inst : instances){
+            if(inst.getLabel().equals("live")) aCount++;
+            else bCount++;
+        }
+        int total = aCount + bCount;
+        //Need a check if the classes have equal count
+        Random random = new Random();
+        if(aCount == bCount){
+            if(random.nextBoolean()) return new Node("live", 0.5);
+            else return new Node("die", 0.5);
+        }
+        String probableClass = (aCount > bCount) ? "live" : "die";
+        double highestProb = (aCount > bCount) ? (double)aCount/(double)total : (double)bCount/(double)total;
+        return new Node(probableClass, highestProb);
     }
+
 
     /**------------- Reading in data --------------*/
 
